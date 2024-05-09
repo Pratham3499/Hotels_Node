@@ -1,6 +1,22 @@
 const express = require('express')
+
 const Person = require('../Models/Person');
 const router = express.Router();
+
+const passport = require('../auth')
+
+const localAuthMiddleware = passport.authenticate('local', { session: false })
+
+
+
+
+
+router.get('/middle', async (req, res) => {
+
+    console.log("I am from middle")
+    res.send('I am from /middle response')
+})
+
 
 router.post('/addPerson', async (req, res) => {
 
@@ -14,7 +30,7 @@ router.post('/addPerson', async (req, res) => {
 
 
     } catch (error) {
-        console.log('I am from catch of /addPerson')
+        console.log('I am from catch of /addPerson', error)
         res.status(500).json(error);
     }
 
@@ -101,7 +117,7 @@ router.put('/updatePersonByAny/:byName', async (req, res) => {
 router.delete('/deletePersonBy/:byName', async (req, res) => {
 
     try {
-       const byName = req.params.byName;
+        const byName = req.params.byName;
         //const updateData = req.body;
         console.log("dekf", byName)
         const response = await Person.deleteOne({ name: byName });
